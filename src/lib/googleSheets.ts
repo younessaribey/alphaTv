@@ -20,14 +20,18 @@ export const submitOrder = async (data: OrderData): Promise<{ success: boolean; 
             return { success: true };
         }
 
-        // Use text/plain to avoid CORS preflight (OPTIONS request) which Google Apps Script doesn't handle
+        // Use FormData which is more reliable for Google Apps Script
+        const formData = new FormData();
+        formData.append('name', data.name);
+        formData.append('phone', data.phone);
+        formData.append('plan', data.plan);
+        if (data.deviceKey) formData.append('deviceKey', data.deviceKey);
+        if (data.macAddress) formData.append('macAddress', data.macAddress);
+
         await fetch(GOOGLE_SHEETS_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-            body: JSON.stringify(data),
+            body: formData,
         });
 
         // Note: no-cors mode doesn't allow reading the response
