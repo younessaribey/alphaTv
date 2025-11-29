@@ -8,7 +8,7 @@ export interface OrderData {
 }
 
 // Replace this URL with your Google Apps Script deployment URL
-const GOOGLE_SHEETS_URL = typeof window !== 'undefined' && (window as any).REACT_APP_GOOGLE_SHEETS_URL || '';
+const GOOGLE_SHEETS_URL = import.meta.env.VITE_GOOGLE_SHEETS_URL || (typeof window !== 'undefined' && (window as any).REACT_APP_GOOGLE_SHEETS_URL) || '';
 
 export const submitOrder = async (data: OrderData): Promise<{ success: boolean; error?: string }> => {
     try {
