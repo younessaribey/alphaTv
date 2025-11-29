@@ -1,0 +1,84 @@
+/* Performance optimizations for smooth scrolling and animations */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Hardware acceleration for common animated elements */
+.glass-effect,
+.card-hover,
+[class*="animate-"],
+[class*="transition-"] {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Optimize blur effects */
+[class*="blur-"] {
+    transform: translateZ(0);
+    will-change: filter;
+}
+
+/* Smooth gradient rendering */
+[class*="gradient-"] {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimize images and media */
+img,
+video,
+picture {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Optimize fixed/sticky elements */
+.fixed,
+.sticky,
+[class*="fixed"],
+[class*="sticky"] {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Remove will-change after animation completes
+   (browsers handle this automatically, but we can help) */
+.animation-complete {
+    will-change: auto;
+}
+
+/* Optimize scrolling containers */
+.overflow-hidden,
+.overflow-scroll,
+.overflow-auto {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Force GPU rendering for heavy sections */
+section {
+    transform: translateZ(0);
+}
+
+/* Optimize button interactions */
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Reduce paint areas */
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
