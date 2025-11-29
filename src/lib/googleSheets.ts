@@ -20,18 +20,22 @@ export const submitOrder = async (data: OrderData): Promise<{ success: boolean; 
             return { success: true };
         }
 
-        // Use FormData which is more reliable for Google Apps Script
-        const formData = new FormData();
-        formData.append('name', data.name);
-        formData.append('phone', data.phone);
-        formData.append('plan', data.plan);
-        if (data.deviceKey) formData.append('deviceKey', data.deviceKey);
-        if (data.macAddress) formData.append('macAddress', data.macAddress);
+        // Use URLSearchParams (application/x-www-form-urlencoded)
+        // This is the most compatible method for Google Apps Script
+        const params = new URLSearchParams();
+        params.append('name', data.name);
+        params.append('phone', data.phone);
+        params.append('plan', data.plan);
+        if (data.deviceKey) params.append('deviceKey', data.deviceKey);
+        if (data.macAddress) params.append('macAddress', data.macAddress);
 
         await fetch(GOOGLE_SHEETS_URL, {
             method: 'POST',
             mode: 'no-cors',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params.toString(),
         });
 
         // Note: no-cors mode doesn't allow reading the response
