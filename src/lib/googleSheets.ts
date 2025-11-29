@@ -20,11 +20,12 @@ export const submitOrder = async (data: OrderData): Promise<{ success: boolean; 
             return { success: true };
         }
 
+        // Use text/plain to avoid CORS preflight (OPTIONS request) which Google Apps Script doesn't handle
         await fetch(GOOGLE_SHEETS_URL, {
             method: 'POST',
-            mode: 'no-cors', // Required for Google Apps Script
+            mode: 'no-cors',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain',
             },
             body: JSON.stringify(data),
         });
